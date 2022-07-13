@@ -46,3 +46,23 @@ if(search_params.has('id')) {
 getProduct().then(product => {
     addData(product);
 }).catch(err => console.log(err));
+
+function addCart() {
+    getProduct().then(product => { 
+    let productColor = document.getElementById('colors');
+    let productAmount = document.getElementById('quantity');
+
+    let productJson = {
+        id: product._id,
+        amount: productAmount.value,
+        color: productColor.value,
+    }
+
+    let cartObj = JSON.stringify(productJson);
+    localStorage.setItem("obj",cartObj);
+    }).catch(err => console.log(err));
+}
+
+let button = document.getElementById('addToCart');
+
+button.onclick = addCart;
