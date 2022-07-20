@@ -1,12 +1,14 @@
 //Récupère les datas.
 function getProduct() {
     return fetch("http://localhost:3000/api/products/"+ id).then(res => {
-        if(!res.ok) {
-            throw Error("HTTP " + res.status + " " + res.statusText);
-        }
-        return res.json();
-    })
+    if(!res.ok) {
+        throw Error("HTTP " + res.status + " " + res.statusText);
+    }
+    return res.json();
+})
 }
+
+let cart = [];
 
 function addData(product) {
     
@@ -45,24 +47,26 @@ if(search_params.has('id')) {
 //Fonction qui récupère les datas et les affiche pour chaque produits.
 getProduct().then(product => {
     addData(product);
+    document.getElementById('addToCart').onclick = addCart(product);
 }).catch(err => console.log(err));
 
-function addCart() {
-    getProduct().then(product => { 
-    let productColor = document.getElementById('colors');
-    let productAmount = document.getElementById('quantity');
+function addCart(product) {
+    return () => {
+        let productColor = document.getElementById('colors');
+        let productAmount = document.getElementById('quantity');
+        
+        let productJson = {
+            id: product._id,
+            amount: productAmount.value,
+            color: productColor.value,
+        }
+        
+        let cartObj = JSON.stringify(productJson);
+        localStorage.setItem("obj",cartObj);
 
-    let productJson = {
-        id: product._id,
-        amount: productAmount.value,
-        color: productColor.value,
+        let getObj = localStorage.getItem("obj");
+        let getJson = JSON.parse(getObj);
+        cart.push(getJson);
+
     }
-
-    let cartObj = JSON.stringify(productJson);
-    localStorage.setItem("obj",cartObj);
-    }).catch(err => console.log(err));
 }
-
-let button = document.getElementById('addToCart');
-
-button.onclick = addCart;
