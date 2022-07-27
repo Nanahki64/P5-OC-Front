@@ -52,21 +52,30 @@ getProduct().then(product => {
 
 function addCart(product) {
     return () => {
-        let productColor = document.getElementById('colors');
-        let productAmount = document.getElementById('quantity');
-        
-        let productJson = {
-            id: product._id,
-            amount: productAmount.value,
-            color: productColor.value,
+        let productColor = document.getElementById('colors').value;
+        let productAmount = parseInt(document.getElementById('quantity').value);
+
+        if (!!productColor && productAmount > 0 && productAmount < 101 ) {
+
+            let cart = JSON.parse(localStorage.getItem("cart")) ?? [];
+
+            let twinProduct = cart.find(prod => prod.id === product._id && prod.color === productColor);
+
+            if (!!twinProduct) {
+                for (multipleProduct of cart) {
+                    if (multipleProduct.color == twinProduct.color && twinProduct.id == multipleProduct.id) {
+                        multipleProduct.amount++;
+                    }
+                }
+
+            } else {
+                cart.push({
+                    id: product._id, 
+                    amount: productAmount,
+                    color: productColor
+                });
+            }
+            window.localStorage.setItem("cart",JSON.stringify(cart));
         }
-        
-        let cartObj = JSON.stringify(productJson);
-        localStorage.setItem("obj",cartObj);
-
-        let getObj = localStorage.getItem("obj");
-        let getJson = JSON.parse(getObj);
-        cart.push(getJson);
-
     }
 }
