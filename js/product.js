@@ -8,8 +8,6 @@ function getProduct() {
 })
 }
 
-let cart = [];
-
 function addData(product) {
     
     //Sélectionne la div qui à pour classe item__img.
@@ -35,21 +33,6 @@ function addData(product) {
     }
 }
 
-//Récupération de l'id de l'url.
-var realTimeUrl = window.location.href;
-var url = new URL(realTimeUrl);
-var search_params = new URLSearchParams(url.search);
-
-if(search_params.has('id')) {
-    var id = search_params.get('id');
-}
-
-//Fonction qui récupère les datas et les affiche pour chaque produits.
-getProduct().then(product => {
-    addData(product);
-    document.getElementById('addToCart').onclick = addCart(product);
-}).catch(err => console.log(err));
-
 function addCart(product) {
     return () => {
         let productColor = document.getElementById('colors').value;
@@ -62,12 +45,7 @@ function addCart(product) {
             let twinProduct = cart.find(prod => prod.id === product._id && prod.color === productColor);
 
             if (!!twinProduct) {
-                for (multipleProduct of cart) {
-                    if (multipleProduct.color == twinProduct.color && twinProduct.id == multipleProduct.id) {
-                        multipleProduct.amount++;
-                    }
-                }
-
+                twinProduct.amount++;
             } else {
                 cart.push({
                     id: product._id, 
@@ -79,3 +57,18 @@ function addCart(product) {
         }
     }
 }
+
+//Récupération de l'id de l'url.
+var realTimeUrl = window.location.href;
+var url = new URL(realTimeUrl);
+var search_params = new URLSearchParams(url.search);
+
+if(search_params.has('id')) {
+    var id = search_params.get('id');
+}
+
+//Fonction qui récupère les datas et les affiche pour chaque produits.
+getProduct().then(product => {
+    addData(product); //Insert les données du produit dans la pâge.
+    document.getElementById('addToCart').onclick = addCart(product); //Lie l'événement click du bouton addToCart a la call back addCart qui ajoute un produit au panier.
+}).catch(err => console.log(err));
