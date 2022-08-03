@@ -33,29 +33,38 @@ function getProductTemplate(pendingCart, productData) {
   </article>`
 }
 
-function addCartData(products) {
-  let cart = localStorage.getItem("cart");
-  let pendingCart = JSON.parse(cart);
-  
-  let html = "";
+function displayCart() {
+  let pendingCart = JSON.parse(window.localStorage.getItem("cart")) ?? [];
   let display = document.getElementById("cart__items");
   
-  for(let productInCart of pendingCart) {
+  if(pendingCart.length) {
+    getProduct().then( products => {
+      let amountTotal = 0;
+      let priceTotal = 0;
 
-    productData = products.find(prod => prod._id === productInCart.id);
+      let html = "";
+
+      for(let productInCart of pendingCart) {
+        amountTotal += productInCart.amount;
+
+        productData = products.find(prod => prod._id === productInCart.id);
+        
+        html += getProductTemplate(productInCart, productData);
+      }
+      display.innerHTML = html;
+      displayDetailsOrder(amountTotal);
+    }).catch(err => console.log(err))
     
-    html += getProductTemplate(productInCart, productData);
+  } else {
+    display.innerHTML = '<h1>est vide</h1>'
   }
-  display.innerHTML = html;
 }
 
-// function detailsOrder() {
-//   let displayAmount = document.getElementById('totalQuantity');
-//   displayAmount.innerText = ``;
-// }
+function displayDetailsOrder(amountTotal) {
+  let displayAmount = document.getElementById('totalQuantity');
+  displayAmount.innerText = `${amountTotal}`;
+}
 
-//Fonction qui récupère les datas et les affiche pour chaque produits.
-getProduct().then( products => {
-  addCartData(products)
-  // detailsOrder()
-}).catch(err => console.log(err))
+
+/*******************************main*******************************************/
+displayCart();
