@@ -45,11 +45,11 @@ function displayCart() {
       let html = "";
 
       for(let productInCart of pendingCart) {
-        amountTotal += productInCart.amount;
+        amountTotal = Number(amountTotal) + Number(productInCart.amount);
 
         productData = products.find(prod => prod._id === productInCart.id);
-        
-        priceTotal += productData.price;
+
+        priceTotal = Number(priceTotal) + (Number(productData.price) * Number(productInCart.amount));
 
         html += getProductTemplate(productInCart, productData);
       }
