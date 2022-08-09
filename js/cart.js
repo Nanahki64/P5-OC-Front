@@ -49,10 +49,13 @@ function displayCart() {
 
         productData = products.find(prod => prod._id === productInCart.id);
         
+        priceTotal += productData.price;
+
         html += getProductTemplate(productInCart, productData);
       }
       display.innerHTML = html;
-      displayDetailsOrder(amountTotal);
+      displayDetailsOrder(amountTotal, priceTotal);
+      changeAmount();
     }).catch(err => console.log(err))
     
   } else {
@@ -60,9 +63,31 @@ function displayCart() {
   }
 }
 
-function displayDetailsOrder(amountTotal) {
+function displayDetailsOrder(amountTotal, priceTotal) {
   let displayAmount = document.getElementById('totalQuantity');
   displayAmount.innerText = `${amountTotal}`;
+
+  let displayPrice = document.getElementById('totalPrice');
+  displayPrice.innerText = `${priceTotal}`;
+}
+
+function changeAmount() {
+  let actualAmounts = document.getElementsByClassName('itemQuantity');
+  let pendingCart = JSON.parse(window.localStorage.getItem("cart"));
+
+  for(let actualAmount of actualAmounts) {
+    actualAmount.addEventListener('change', function () {
+      
+      let selectedProduct = actualAmount.closest('.cart__item');
+      
+      let findProductInCart = pendingCart.find(prod => prod.id === selectedProduct.dataset.id && prod.color === selectedProduct.dataset.color);
+      
+      if(!!findProductInCart) {
+        findProductInCart.amount = actualAmount.value;
+      }
+      window.localStorage.setItem("cart", JSON.stringify(pendingCart));
+    });
+  }
 }
 
 
