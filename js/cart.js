@@ -56,6 +56,7 @@ function displayCart() {
       display.innerHTML = html;
       displayDetailsOrder(amountTotal, priceTotal);
       changeAmount();
+      deleteProduct();
     }).catch(err => console.log(err))
     
   } else {
@@ -90,6 +91,25 @@ function changeAmount() {
   }
 }
 
+function deleteProduct() {
+  let deleteButton = document.getElementsByClassName('deleteItem');
+  let pendingCart = JSON.parse(window.localStorage.getItem("cart"));
+  
+  for(let productToDelete of deleteButton) {
+    productToDelete.addEventListener('click', function () {
+      
+      let selectedProduct = productToDelete.closest('.cart__item');
+      
+      let findProductInCart = pendingCart.find(prod => prod.id === selectedProduct.dataset.id && prod.color === selectedProduct.dataset.color);
+
+      if (!!findProductInCart) {
+        pendingCart = pendingCart.filter(prod => prod !== findProductInCart);
+        window.location.reload();
+      }
+      window.localStorage.setItem("cart", JSON.stringify(pendingCart));
+    });
+  }
+}
 
 /*******************************main*******************************************/
 displayCart();
