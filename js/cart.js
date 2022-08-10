@@ -111,5 +111,119 @@ function deleteProduct() {
   }
 }
 
+function submitOrder() {
+  let cartOrderForms = document.querySelector('.cart__order__form');
+
+  const firstNameRegex = function(input) {
+    let regex = new RegExp(/^[A-Z][A-Za-z\é\è\ê\-]+$/);
+    let testInput = regex.test(input.value);
+    let selectErrorTag = input.nextElementSibling;
+
+    if(!testInput) {
+      selectErrorTag.innerText = "Prénom incorrect"
+      return false;
+    } else {
+      selectErrorTag.innerText = ""
+      return true;
+    }
+  };
+
+  const lastNameRegex = function(input) {
+    let regex = new RegExp(/^[A-Z][A-Za-z\é\è\ê\-]+$/);
+    let testInput = regex.test(input.value);
+    let selectErrorTag = input.nextElementSibling;
+
+    if(!testInput) {
+      selectErrorTag.innerText = "Nom incorrect"
+      return false;
+    } else {
+      selectErrorTag.innerText = ""
+      return true;
+    }
+  };
+
+  const addressRegex = function (input) {
+    let regex = new RegExp(/^([1-9][0-9]*(?:-[1-9][0-9]*)*)[\s,-]+(?:(bis|ter|qua)[\s,-]+)?([\w]+[\-\w]*)[\s,]+([-\w].+)$/);
+    let testInput = regex.test(input.value);
+    let selectErrorTag = input.nextElementSibling;
+
+    if(!testInput) {
+      selectErrorTag.innerText = "adresse incorrect"
+      return false;
+    } else {
+      selectErrorTag.innerText = ""
+      return true;
+    }
+  };
+
+  const cityRegex = function(input) {
+    let regex = new RegExp(/^[A-Z][A-Za-z\é\è\ê\-]+$/);
+    let testInput = regex.test(input.value);
+    let selectErrorTag = input.nextElementSibling;
+
+    if(!testInput) {
+      selectErrorTag.innerText = "Ville incorrect"
+      return false;
+    } else {
+      selectErrorTag.innerText = ""
+      return true;
+    }
+  };
+
+  const emailRegex = function (input) {
+    let regex = new RegExp(/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/);
+    let testInput = regex.test(input.value);
+    let selectErrorTag = input.nextElementSibling;
+
+    if(!testInput) {
+      selectErrorTag.innerText = "Email incorrect"
+      return false;
+    } else {
+      selectErrorTag.innerText = ""
+      return true;
+    }
+  };
+
+  cartOrderForms.firstName.addEventListener('change', function () {
+    firstNameRegex(this);
+  });
+
+  cartOrderForms.lastName.addEventListener('change', function () {
+    lastNameRegex(this);
+  });
+
+  cartOrderForms.address.addEventListener('change', function () {
+    addressRegex(this);
+  });
+
+  cartOrderForms.city.addEventListener('change', function () {
+    cityRegex(this);
+  });
+
+  cartOrderForms.email.addEventListener('change', function () {
+    emailRegex(this);
+  });
+
+  cartOrderForms.order.addEventListener('click', function () {
+    if(firstNameRegex(cartOrderForms.firstName) 
+        && lastNameRegex(cartOrderForms.lastName) 
+        && addressRegex(cartOrderForms.address) 
+        && cityRegex(cartOrderForms.city) 
+        && emailRegex(cartOrderForms.email)) {
+      let validForm = {
+        firstName: cartOrderForms.firstName.value,
+        lastName: cartOrderForms.lastName.value,
+        address: cartOrderForms.address.value,
+        city: cartOrderForms.city.value,
+        email: cartOrderForms.email.value,
+      }
+      let validOrder = JSON.stringify(validForm);
+      window.localStorage.setItem('validForm', validOrder);
+    }
+  });
+  
+}
+
 /*******************************main*******************************************/
 displayCart();
+submitOrder();
