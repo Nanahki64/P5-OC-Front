@@ -37,6 +37,9 @@ function getCart() {
   return JSON.parse(window.localStorage.getItem("cart")) ?? [];
 }
 
+function getContact() {
+  return JSON.parse(window.localStorage.getItem("contact")) ?? [];
+}
 
 function displayCart() {
   let pendingCart = getCart();
@@ -197,25 +200,53 @@ function submitOrder() {
   cartOrderForms.email.addEventListener('change', function () {
     emailRegex(this);
   });
-  
+
   cartOrderForms.order.addEventListener('click', function () {
     if(firstNameRegex(cartOrderForms.firstName) 
     && lastNameRegex(cartOrderForms.lastName) 
     && addressRegex(cartOrderForms.address) 
     && cityRegex(cartOrderForms.city) 
     && emailRegex(cartOrderForms.email)) {
-      let validForm = {
+      let contact = {
         firstName: cartOrderForms.firstName.value,
         lastName: cartOrderForms.lastName.value,
         address: cartOrderForms.address.value,
         city: cartOrderForms.city.value,
         email: cartOrderForms.email.value,
       }
-      let validOrder = JSON.stringify(validForm);
-      window.localStorage.setItem('validForm', validOrder);
+      let validOrder = JSON.stringify(contact);
+      window.localStorage.setItem('contact', validOrder);
+      postOrder();
     }
   });
-  
+}
+
+function postOrder() {
+  let pendingCart = getCart();
+  let contact = getContact();
+
+  let finalCart = [];
+
+  for(let cart of pendingCart) {
+    finalCart.push(cart.id);
+  }
+
+  let finalOrder = {
+    contact: contact,
+    products: finalCart
+  };
+
+  fetch('http://localhost:3000/api/products/order', {
+    method: "POST",
+    body: JSON.stringify(finalOrder),
+    headers : {
+      "Content-type": "application/json"
+    }
+  })
+  .then(response => response.json())
+  .then(response => {
+    document.location.href = `confirmation.html?orderId=${response.orderId}`;
+  });
 }
 
 /*******************************main*******************************************/
