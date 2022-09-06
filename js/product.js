@@ -1,4 +1,8 @@
-//Récupère les datas.
+/**
+ * Récupère les datas.
+ * @function
+ * @returns {Promise}
+*/
 function getProduct() {
     return fetch("http://localhost:3000/api/products/"+ id).then(res => {
     if(!res.ok) {
@@ -8,6 +12,10 @@ function getProduct() {
 })
 }
 
+/**
+ * Ajoute les données du produit dans la page.
+ * @param {string} product
+ */
 function addData(product) {
     
     //Sélectionne la div qui à pour classe item__img.
@@ -33,6 +41,10 @@ function addData(product) {
     }
 }
 
+/**
+ * Ajoute les données du panier au local storage.
+ * @param {string} product
+ */
 function addCart(product) {
     return () => {
         let productColor = document.getElementById('colors').value;
@@ -58,7 +70,10 @@ function addCart(product) {
     }
 }
 
-//Récupération de l'id de l'url.
+/**
+ * Récupère l'id de l'url.
+ * @return {Object}
+ */
 var realTimeUrl = window.location.href;
 var url = new URL(realTimeUrl);
 var search_params = new URLSearchParams(url.search);

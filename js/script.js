@@ -1,4 +1,8 @@
-//Récupère les datas.
+/**
+ * Récupère les datas.
+ * @function
+ * @returns {Promise}
+*/
 function getProduct() {
     return fetch("http://localhost:3000/api/products").then(res => {
         if(!res.ok) {
@@ -8,7 +12,12 @@ function getProduct() {
     })
 }
 
-//Retourne le template html.
+/**
+ * Retourne le template html correspondant à un produit.
+ * @function
+ * @param {string} product
+ * @returns {string}
+*/
 function getProductTemplate(product) {
     return `<a href="./product.html?id=${product._id}">
     <article>
@@ -19,7 +28,10 @@ function getProductTemplate(product) {
   </a>`
 }
 
-//Séléctionne la section qui à pour ID items.
+/**
+ * Séléctionne la section qui à pour ID items.
+ * @type {Element}
+*/
 let display = document.getElementById("items");
 
 //Fonction qui récupère les datas et les affiche pour chaque produits.

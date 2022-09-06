@@ -1,4 +1,8 @@
-//Récupère les datas.
+/**
+ * Récupère les datas.
+ * @function
+ * @returns {Promise}
+*/
 function getProduct() {
   return fetch("http://localhost:3000/api/products").then(res => {
   if(!res.ok) {
@@ -8,7 +12,11 @@ function getProduct() {
 })
 }
 
-//Retourne le template html.
+/**
+ * Retourne le template html.
+ * @function
+ * @returns {string}
+*/
 function getProductTemplate(pendingCart, productData) {
   return `<article class="cart__item" data-id="${pendingCart.id}" data-color="${pendingCart.color}">
   <div class="cart__item__img">
@@ -33,14 +41,29 @@ function getProductTemplate(pendingCart, productData) {
   </article>`
 }
 
+/**
+ * Récupère le panier.
+ * @function
+ * @returns {Object}
+ */
 function getCart() {
   return JSON.parse(window.localStorage.getItem("cart")) ?? [];
 }
 
+/**
+ * Récupère les informations du client.
+ * @function
+ * @returns {Object}
+ */
 function getContact() {
   return JSON.parse(window.localStorage.getItem("contact")) ?? [];
 }
 
+/**
+ * Affiche les éléments du panier.
+ * @function
+ * @returns {Object} || @return {string}
+ */
 function displayCart() {
   let pendingCart = getCart();
   let display = document.getElementById("cart__items");
@@ -75,6 +98,11 @@ function displayCart() {
   }
 }
 
+/**
+ * Affiche les détails de la commande.
+ * @function
+ * @returns {string}
+ */
 function displayDetailsOrder(amountTotal, priceTotal) {
   let displayAmount = document.getElementById('totalQuantity');
   displayAmount.innerText = `${amountTotal}`;
@@ -83,6 +111,11 @@ function displayDetailsOrder(amountTotal, priceTotal) {
   displayPrice.innerText = `${priceTotal}`;
 }
 
+/**
+ * Permet de changer la quantité des produits du panier.
+ * @function
+ * @returns {Object}
+ */
 function changeAmount(event) {
   let pendingCart = getCart();
   let selectedProduct = event.target.closest('.cart__item');
@@ -95,6 +128,11 @@ function changeAmount(event) {
   window.localStorage.setItem("cart", JSON.stringify(pendingCart));
 }
 
+/**
+ * Permet de supprimer un produit du panier.
+ * @function
+ * @returns {Object}
+ */
 function deleteProduct(event) {
   let pendingCart = getCart();
   let selectedProduct = event.target.closest('.cart__item');
@@ -108,9 +146,14 @@ function deleteProduct(event) {
   window.localStorage.setItem("cart", JSON.stringify(pendingCart));
 }
 
+/**
+ * Permet d'envoyer la commande'.
+ * @function
+ * @returns {Promise}
+ */
 function submitOrder() {
   let cartOrderForms = document.querySelector('.cart__order__form');
-  
+
   const firstNameRegex = function(input) {
     let regex = new RegExp(/^[A-Z][A-Za-z\é\è\ê\-]+$/);
     let testInput = regex.test(input.value);
@@ -201,7 +244,9 @@ function submitOrder() {
     emailRegex(this);
   });
 
-  cartOrderForms.order.addEventListener('click', function () {
+  cartOrderForms.order.addEventListener('click', function (event) {
+    event.preventDefault();
+    
     if(firstNameRegex(cartOrderForms.firstName) 
     && lastNameRegex(cartOrderForms.lastName) 
     && addressRegex(cartOrderForms.address) 
