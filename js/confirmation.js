@@ -23,7 +23,6 @@ if(search_params.has('orderId')) {
 validateOrderId.innerText = orderId;
 
 /**
- * Supprime le panier et la fiche contact.
- * @return {Object}
+ * Supprime le panier.
  */
 window.localStorage.clear();

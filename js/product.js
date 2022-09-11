@@ -14,6 +14,7 @@ function getProduct() {
 
 /**
  * Ajoute les données du produit dans la page.
+ * @function
  * @param {string} product
  */
 function addData(product) {
@@ -43,6 +44,7 @@ function addData(product) {
 
 /**
  * Ajoute les données du panier au local storage.
+ * @function
  * @param {string} product
  */
 function addCart(product) {
@@ -82,8 +84,10 @@ if(search_params.has('id')) {
     var id = search_params.get('id');
 }
 
-//Fonction qui récupère les datas et les affiche pour chaque produits.
+/**
+ * Fonction qui récupère les datas et les affiche pour chaque produits.
+ */
 getProduct().then(product => {
-    addData(product); //Insert les données du produit dans la pâge.
+    addData(product); //Insert les données du produit dans la page.
     document.getElementById('addToCart').onclick = addCart(product); //Lie l'événement click du bouton addToCart a la call back addCart qui ajoute un produit au panier.
 }).catch(err => console.log(err));

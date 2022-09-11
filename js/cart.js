@@ -15,6 +15,8 @@ function getProduct() {
 /**
  * Retourne le template html.
  * @function
+ * @param {object} pendingCart
+ * @param {object} productData
  * @returns {string}
 */
 function getProductTemplate(pendingCart, productData) {
@@ -44,25 +46,15 @@ function getProductTemplate(pendingCart, productData) {
 /**
  * Récupère le panier.
  * @function
- * @returns {Object}
+ * @returns {Array}
  */
 function getCart() {
   return JSON.parse(window.localStorage.getItem("cart")) ?? [];
 }
 
 /**
- * Récupère les informations du client.
- * @function
- * @returns {Object}
- */
-function getContact() {
-  return JSON.parse(window.localStorage.getItem("contact")) ?? [];
-}
-
-/**
  * Affiche les éléments du panier.
  * @function
- * @returns {Object} || @return {string}
  */
 function displayCart() {
   let pendingCart = getCart();
@@ -101,7 +93,8 @@ function displayCart() {
 /**
  * Affiche les détails de la commande.
  * @function
- * @returns {string}
+ * @param {number} amountTotal
+ * @param {number} priceTotal
  */
 function displayDetailsOrder(amountTotal, priceTotal) {
   let displayAmount = document.getElementById('totalQuantity');
@@ -114,7 +107,7 @@ function displayDetailsOrder(amountTotal, priceTotal) {
 /**
  * Permet de changer la quantité des produits du panier.
  * @function
- * @returns {Object}
+ * @param {Event} event
  */
 function changeAmount(event) {
   let pendingCart = getCart();
@@ -131,7 +124,7 @@ function changeAmount(event) {
 /**
  * Permet de supprimer un produit du panier.
  * @function
- * @returns {Object}
+ * @param {Event} event
  */
 function deleteProduct(event) {
   let pendingCart = getCart();
@@ -259,16 +252,13 @@ function submitOrder() {
         city: cartOrderForms.city.value,
         email: cartOrderForms.email.value,
       }
-      let validOrder = JSON.stringify(contact);
-      window.localStorage.setItem('contact', validOrder);
-      postOrder();
+      postOrder(contact);
     }
   });
 }
 
-function postOrder() {
+function postOrder(contact) {
   let pendingCart = getCart();
-  let contact = getContact();
 
   let finalCart = [];
 
