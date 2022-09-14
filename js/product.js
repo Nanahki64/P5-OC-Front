@@ -59,7 +59,7 @@ function addCart(product) {
             let twinProduct = cart.find(prod => prod.id === product._id && prod.color === productColor);
 
             if (!!twinProduct) {
-                twinProduct.amount++;
+                twinProduct.amount = twinProduct.amount + productAmount;
             } else {
                 cart.push({
                     id: product._id, 
